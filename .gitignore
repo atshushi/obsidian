@@ -1,0 +1,11 @@
+# Packages
+node_modules/
+
+# Lock files
+*.lock
+
+# Env
+.env
+
+# Editor Config
+.editorconfig
