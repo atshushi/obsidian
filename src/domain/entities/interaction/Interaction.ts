@@ -1,14 +1,14 @@
 import type { IDiscordClient, IInteractionCommandData, IInteractionType } from '@types';
 
-import { Channel, Guild, Member } from '../index';
+import { Channel, Guild, User, Member } from '../index';
 import { Base } from '../base';
 
 export class Interaction extends Base {
   id: string;
   applicationID: string;
   type: IInteractionType;
-  commandData?: IInteractionCommandData;
-  member?: Member;
+  command?: IInteractionCommandData;
+  author?: Member | User;
   token: string;
   version: number;
   applicationPermissions?: string;
@@ -20,8 +20,10 @@ export class Interaction extends Base {
     this.id = data.id;
     this.applicationID = data.application_id;
     this.type = data.type;
-    this.commandData = data.data;
-    this.member = new Member(this.client, this.guild, data.member);
+    this.command = data.data;
+    // eslint-disable-next-line operator-linebreak
+    this.author = data.member?.user ? new Member(this.client, this.guild, data.member) :
+      new User(this.client, data.user);
     this.token = data.token;
     this.version = data.version;
     this.applicationPermissions = data.app_permissions;

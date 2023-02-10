@@ -11,12 +11,13 @@ import {
   Role,
   Sticker,
   User,
+  Member,
 } from '../index';
 import { Base } from '../base';
 
 export class Message extends Base {
   id: string;
-  author: User;
+  author: Member | User;
   content: string;
   sentedAt: Date;
   editedAt: Date;
@@ -52,11 +53,11 @@ export class Message extends Base {
     channel_id?: string;
     guild_id?: string;
     fail_if_not_exists?: boolean;
-  };
+  } | null;
   flags?: number;
   // eslint-disable-next-line no-use-before-define
   referencedMessage?: Message | null;
-  interaction?: Interaction;
+  interaction?: Interaction | null;
   thread?: Channel;
   components?: Component[];
   stickerItems?: {
@@ -77,7 +78,9 @@ export class Message extends Base {
     super(client, data);
 
     this.id = data.id;
-    this.author = data.author;
+    // eslint-disable-next-line operator-linebreak
+    this.author = data.interaction.member?.user ? new Member(this.client, this.guild, data.member) :
+      new User(this.client, data.interaction.user);
     this.content = data.content;
     this.sentedAt = new Date(data.timestamp);
     this.editedAt = new Date(data.edited_timestamp);
@@ -96,20 +99,26 @@ export class Message extends Base {
     this.activity = data.activity;
     this.application = data.application;
     this.applicationID = data.application_id;
-    this.messageReference = data.message_reference;
+    this.messageReference = data.message_reference ?? {
+      guild_id: this.guild?.id ?? null,
+      channel_id: this.channel?.id ?? data.channel_id,
+      message_id: this.id,
+    };
     this.flags = data.flags;
-    this.referencedMessage = new Message(this.client, data.referenced_message);
-    this.interaction = new Interaction(this.client, data.interaction);
-    this.thread = new Channel(data.thread);
+    this.referencedMessage = data.referencedMessage ? new Message(data.referenced_message) : null;
+    this.interaction = data.interaction ? new Interaction(this.client, data.interaction) : null;
+    this.thread = data.thread ? new Channel(this.client, data.thread) : null;
     this.components = data.components.map((component) => new Component(this.client, component));
     this.stickerItems = data.sticker_items;
-    this.stickers = data.stickers.map((sticker) => new Sticker(this.client, sticker));
+    this.stickers = data.stickers ? data.stickers.map((sticker) => new Sticker(this.client, sticker)) : [];
     this.position = data.position;
     this.boostRoleData = data.role_subscription_data;
   }
 
   get guild() {
-    return this.client.guilds.get(this.messageReference.guild_id);
+    // eslint-disable-next-line operator-linebreak
+    return this.client.guilds.get(this.messageReference?.guild_id) ??
+      this.client.guilds.find((guild) => guild.channels.find((channel) => channel.id === this.data.channel_id));
   }
 
   get channel() {
@@ -143,9 +152,9 @@ export class Message extends Base {
   }
 
   reply(data: IMessagePayload) {
-    this.client.rest.request('post', `/channels/${this.id}/messages`, {
+    this.client.rest.request('post', `/channels/${this.channel.id}/messages`, {
       ...data,
-      messageReference: this,
+      message_reference: this.messageReference,
     });
   }
 

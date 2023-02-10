@@ -14,7 +14,7 @@ export abstract class Base {
     return new Date(~~(this.data.id / 4194304 + 1420070400000));
   }
 
-  equalsTo(data: any) {
-    return this.data.id === data.id;
+  equalsTo(id: string) {
+    return this.data.id === id;
   }
 }

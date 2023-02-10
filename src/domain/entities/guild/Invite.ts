@@ -1,9 +1,8 @@
-import type { IDiscordClient } from '@types';
-
+import type { IDiscordClient, IGuildScheduledEvent, IStageInstance } from '@types';
 import { Application, Channel, Guild, Member, User } from '../index';
-import { Base } from '../base';
 
-export class Invite extends Base {
+export class Invite {
+  client: IDiscordClient;
   code: string;
   guild: Guild;
   channel: Channel;
@@ -14,33 +13,11 @@ export class Invite extends Base {
   presenceCount: number;
   memberCount: number;
   expiresAt: Date;
-  stageInstance: {
-    members: Member[];
-    participant_count: number;
-    speaker_count: number;
-    topic: string;
-  };
-  guildScheduledEvent: {
-    id: string;
-    guild_id: string;
-    channel_id: string | null;
-    creator_id?: string | null;
-    name: string;
-    description?: string | null;
-    scheduled_start_time: Date;
-    scheduled_end_time: Date;
-    privacy_level: number;
-    status: number;
-    entity_type: number;
-    entity_id: string | null;
-    entity_metadata: { location?: string } | null;
-    creator?: User;
-    user_count?: number;
-    image?: string | null;
-  };
+  stageInstance: IStageInstance;
+  guildScheduledEvent: IGuildScheduledEvent;
 
   constructor(client: IDiscordClient, data?: any) {
-    super(client, data);
+    this.client = client;
 
     this.code = data.code;
     this.guild = new Guild(data.guild);

@@ -1,7 +1,7 @@
 import EventEmitter from 'events';
 
 import { Collection } from '../utils/Collection';
-import { User } from '../domain/entities/index';
+import { Channel, Member, User } from '../domain/entities/index';
 
 /* eslint-disable no-use-before-define */
 type IDiscordClient = EventEmitter & {
@@ -297,4 +297,119 @@ interface IMessagePayload {
   attachments?: Attachment[];
   flags?: number;
   thread?: string;
+}
+
+interface ITeam {
+  icon: string | null;
+  id: string;
+  members: {
+    membership_state: number;
+    permissions: string[];
+    team_id: string;
+    user: User;
+  }[];
+  name: string;
+  owner_user_id: string;
+}
+
+interface IInstallParams {
+  scopes: string[];
+  permissions: string;
+}
+
+interface ICreateWebhook {
+  name: string,
+  avatar?: string
+}
+
+interface IGetPruneCount {
+  days?: number,
+  include_roles?: string
+}
+
+interface IBeginPrune {
+  days?: number,
+  compute_prune_count?: boolean,
+  include_roles?: string[],
+  reason?: string
+}
+
+interface IComponent {
+  type: number;
+  label: string;
+  style: number;
+  custom_id: string;
+}
+
+interface IEditWebhook {
+  name?: string,
+  avatar?: string
+}
+
+interface ITags {
+  bot_id?: string;
+  integration_id?: string;
+  premium_subscriber?: null;
+  subscription_listing_id?: string;
+  available_for_purchase?: null;
+  guild_connections?: null;
+}
+
+interface IGuildScheduledEvent {
+  id: string;
+  guild_id: string;
+  channel_id: string | null;
+  creator_id?: string | null;
+  name: string;
+  description?: string | null;
+  scheduled_start_time: Date;
+  scheduled_end_time: Date;
+  privacy_level: number;
+  status: number;
+  entity_type: number;
+  entity_id: string | null;
+  entity_metadata: { location?: string } | null;
+  creator?: User;
+  user_count?: number;
+  image?: string | null;
+}
+
+interface IStageInstance {
+  members: Member[];
+  participant_count: number;
+  speaker_count: number;
+  topic: string;
+}
+
+interface IGetArchivedThreads {
+  threads: Channel[];
+  members: Member[];
+  has_more: boolean;
+}
+
+interface IVoiceRegion {
+  id: string;
+  name: string;
+  optimal: boolean;
+  deprecated: boolean;
+  custom: boolean;
+}
+
+interface IAccount {
+  id: string;
+  name: string;
+}
+
+interface IEditWidget {
+  enabled?: boolean,
+  channel_id?: string | null
+}
+
+interface IWidget {
+  id: string;
+  name: string;
+  instant_invite: string | null;
+  channels: Channel[];
+  members: User[];
+  presence_count: number;
 }

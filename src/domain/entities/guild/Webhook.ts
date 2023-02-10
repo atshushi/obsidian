@@ -1,4 +1,4 @@
-import type { IDiscordClient, IMessagePayload } from '@types';
+import type { IDiscordClient, IEditWebhook, IMessagePayload } from '@types';
 
 import { User } from '../index';
 import { Base } from '../base';
@@ -36,7 +36,7 @@ export class Webhook extends Base {
       .find((channel) => channel.id === this.data.channelID);
   }
 
-  edit(data: { name?: string, avatar?: string }) {
+  edit(data: IEditWebhook) {
     this.client.rest
       .request('patch', `/webhooks/${this.id}`, {
         name: data.name ? data.name : this.name,

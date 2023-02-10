@@ -1,4 +1,4 @@
-import type { ICreateRolesParams, IDiscordClient } from '@types';
+import type { ICreateRolesParams, IDiscordClient, ITags } from '@types';
 
 import { Guild } from '../index';
 import { Base } from '../base';
@@ -14,14 +14,7 @@ export class Role extends Base {
   permissions: string;
   managed: boolean;
   mentionable: boolean;
-  tags: {
-    bot_id?: string;
-    integration_id?: string;
-    premium_subscriber?: null;
-    subscription_listing_id?: string;
-    available_for_purchase?: null;
-    guild_connections?: null;
-  };
+  tags: ITags;
   guild: Guild;
 
   constructor(client: IDiscordClient, guild: Guild, data?: any) {

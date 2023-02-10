@@ -1,43 +1,29 @@
-import type { IDiscordClient } from '@types';
+import type { IDiscordClient, IInstallParams, ITeam } from '@types';
 
 import { User } from '../index';
 import { Base } from '../base';
 
 export class Application extends Base {
   id: string;
-  name: any;
-  iconHash: any;
-  description: any;
-  rpcOrigins: any;
-  isPublic: any;
-  requireCodeGrant: any;
-  termsOfServiceURL: any;
-  privacyPolicyURL: any;
+  name: string;
+  iconHash: string | null;
+  description: string;
+  rpcOrigins?: string[];
+  isPublic: boolean;
+  requireCodeGrant: boolean;
+  termsOfServiceURL?: string;
+  privacyPolicyURL?: string;
   owner: User;
   /** @deprecated */
   summary?: string;
   verifyKey: string;
-  team: {
-    icon: string | null;
-    id: string;
-    members: {
-      membership_state: number;
-      permissions: string[];
-      team_id: string;
-      user: User;
-    }[];
-    name: string;
-    owner_user_id: string;
-  };
+  team: ITeam;
   primarySkuID?: string;
   slug?: string;
   coverImageHash?: string;
   flags?: number;
   tags?: string[];
-  installParams?: {
-    scopes: string[];
-    permissions: string;
-  }[];
+  installParams?: IInstallParams[];
   customInstallURL?: string;
   roleConnectionsVerificationURL?: string;
 

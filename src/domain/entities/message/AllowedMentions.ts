@@ -1,15 +1,12 @@
 import type { IDiscordClient } from '@types';
-import { Base } from '../base';
 
-export class AllowedMentions extends Base {
+export class AllowedMentions {
   parse: 'roles' | 'users' | 'everyone';
   roles: string[];
   users: string[];
   replied: boolean;
 
-  constructor(client: IDiscordClient, data?: any) {
-    super(client, data);
-
+  constructor(_client: IDiscordClient, data?: any) {
     this.parse = data.parse;
     this.roles = data.roles;
     this.users = data.users;

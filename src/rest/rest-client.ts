@@ -19,6 +19,7 @@ export class RestClient {
       },
     });
 
-    return response.json() ?? null;
+    if (!response.body) return null;
+    return response.json();
   }
 }

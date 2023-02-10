@@ -9,6 +9,8 @@ import type {
   ICreateInviteOptions,
   IStartThreadOptions,
   IMessagePayload,
+  ICreateWebhook,
+  IGetArchivedThreads,
 } from '@types';
 
 import { User, Member, Message, Invite, Webhook } from '../index';
@@ -109,10 +111,9 @@ export class Channel extends Base {
     this.client.rest.request('post', `/channels/${this.id}/messages`, data);
   }
 
-  async createWebhook(data: { name: string, avatar?: string }) {
+  async createWebhook(data: ICreateWebhook) {
     const webhook = await this.client.rest.request('post', `/channels/${this.id}/webhooks`, data);
 
-    console.log(webhook);
     return new Webhook(this.client, webhook);
   }
 
@@ -138,8 +139,8 @@ export class Channel extends Base {
     this.client.rest.request('delete', `/channels/${this.id}/permissions/${id}`);
   }
 
-  followAnnouncementChannel(data: { channelID: string }) {
-    this.client.rest.request('post', `/channels/${this.id}/followers`, data);
+  followAnnouncementChannel(channelID: string) {
+    this.client.rest.request('post', `/channels/${this.id}/followers`, { webhook_channel_id: channelID });
   }
 
   async getPinnedMessages() {
@@ -149,9 +150,8 @@ export class Channel extends Base {
   }
 
   removeUserToDM(userID: string) {
-    // eslint-disable-next-line no-useless-return
-    if (this.type !== 3) return;
-    this.client.rest.request('delete', `/channels/${this.id}/recipients/${userID}`);
+    if (this.type === 3)
+      this.client.rest.request('delete', `/channels/${this.id}/recipients/${userID}`);
   }
 
   startThread(data?: IStartThreadOptions) {
@@ -166,21 +166,25 @@ export class Channel extends Base {
     this.client.rest.request('delete', `/channels/${this.id}/thread-members/${memberID}`);
   }
 
-  async getPublicArchivedThreads() {
+  async getPublicArchivedThreads(): Promise<IGetArchivedThreads> {
     const response = await this.client.rest.request('get', `/channels/${this.id}/threads/archived/public`);
 
-    return response;
+    return response
+      .map(({ threads }) => new Channel(this.client, threads))
+      .map(({ members }) => new Member(this.client, members, this.guild.id));
   }
 
-  async getPrivateArchivedThreads() {
+  async getPrivateArchivedThreads(): Promise<IGetArchivedThreads> {
     const response = await this.client.rest.request('get', `/channels/${this.id}/threads/archived/private`);
 
-    return response;
+    return response
+      .map(({ threads }) => new Channel(this.client, threads))
+      .map(({ members }) => new Member(this.client, members, this.guild.id));
   }
 
   async getWebhooks() {
     const response = await this.client.rest.request('get', `/channels/${this.id}/webhooks`);
 
-    return new Webhook(this.client, response);
+    return response.map((webhook) => new Webhook(this.client, webhook));
   }
 }

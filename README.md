@@ -5,5 +5,5 @@
 Obsidian is a Library for interacts with discord api
 
 ### Contact Us
-Discord: sushi#0326
+Discord: sushi#0326<br />
 Email: atsushithesushi@gmail.com

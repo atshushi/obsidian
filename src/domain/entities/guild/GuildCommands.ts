@@ -1,17 +1,16 @@
 import type { IDiscordClient, IInteractionCommandDataOption } from '@types';
-import { Base } from '../base';
 
-export class GuildCommands extends Base {
-  guildID: string;
+export class GuildCommands {
+  client: IDiscordClient;
+  data?: any;
 
   constructor(client: IDiscordClient, data?: any) {
-    super(client, data);
-
-    this.guildID = data.id;
+    this.client = client;
+    this.data = data;
   }
 
   create(command: IInteractionCommandDataOption) {
-    this.client.rest.request('post', `/applications/${this.client.user.id}/guilds/${this.guildID}/commands`, command);
+    this.client.rest.request('post', `/applications/${this.client.user.id}/guilds/${this.data.id}/commands`, command);
   }
 
   deleteCommand(id: string, data: IInteractionCommandDataOption) {

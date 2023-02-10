@@ -1,4 +1,4 @@
-import type { IDiscordClient } from '@types';
+import type { IAccount, IDiscordClient } from '@types';
 
 import { Application, User } from '../index';
 import { Base } from '../base';
@@ -14,10 +14,7 @@ export class Integration extends Base {
   expireBehaviour?: number;
   expireGracePeriod?: number;
   user?: User;
-  account: {
-    id: string;
-    name: string;
-  };
+  account: IAccount;
   syncedAt?: Date;
   subscriberCount?: number;
   revoked?: boolean;

@@ -5,6 +5,11 @@ import type {
   IEditWelcomeScreen,
   IWelcomeScreen,
   ICreateStickerParams,
+  IGetPruneCount,
+  IBeginPrune,
+  IVoiceRegion,
+  IEditWidget,
+  IWidget,
 } from '@types';
 
 import {
@@ -43,7 +48,7 @@ export class Guild extends Base {
   roles: Role[];
   emojis: Emoji[];
   features: string[];
-  mfaLevel: number;
+  MFALevel: number;
   applicationID: string | null;
   systemChannelID: string | null;
   systemChannelFlags: number;
@@ -98,7 +103,7 @@ export class Guild extends Base {
     this.roles = data.roles.map((role) => new Role(this.client, this, role));
     this.emojis = data.emojis.map((emoji) => new Emoji(this.client, emoji));
     this.features = data.features;
-    this.mfaLevel = data.mfa_level;
+    this.MFALevel = data.mfa_level;
     this.applicationID = data.application_id;
     this.systemChannelID = data.system_channel_id;
     this.systemChannelFlags = data.system_channel_flags;
@@ -166,10 +171,13 @@ export class Guild extends Base {
     this.client.rest.request('post', `/guilds/${this.id}/channels`, data);
   }
 
-  async getWebhooks() {
-    const response = await this.client.rest.request('get', `/guilds/${this.id}/webhooks`);
+  async getWebhooks(id?: string) {
+    // eslint-disable-next-line operator-linebreak
+    const response = id ? new Webhook(this.client, await this.client.rest.request('get', `/webhooks/${id}`)) :
+      await this.client.rest.request('get', `/guilds/${this.id}/webhooks`)
+        .map((webhook) => new Webhook(this.client, webhook));
 
-    return response.map((webhook) => new Webhook(this.client, webhook));
+    return response;
   }
 
   async getBans(id?: string) {
@@ -186,17 +194,17 @@ export class Guild extends Base {
     this.client.rest.request('post', `/guilds/${this.id}/mfa`, { level });
   }
 
-  async getPruneCount(data?: { days?: number, include_roles?: string }) {
+  async getPruneCount(data?: IGetPruneCount) {
     const response = await this.client.rest.request('get', `/guilds/${this.id}/prune`, data);
 
     return response;
   }
 
-  beginPrune(data?: { days?: number, compute_prune_count?: boolean, include_roles?: string[], reason?: string }) {
+  beginPrune(data?: IBeginPrune) {
     this.client.rest.request('post', `/guilds/${this.id}/prune`, data);
   }
 
-  async getVoiceRegions() {
+  async getVoiceRegions(): Promise<IVoiceRegion> {
     const response = await this.client.rest.request('get', `/guilds/${this.id}/regions`);
 
     return response;
@@ -228,13 +236,13 @@ export class Guild extends Base {
     return response;
   }
 
-  async editWidget(data?: { enabled?: boolean, channel_id?: string | null }) {
+  async editWidget(data?: IEditWidget) {
     const response = await this.client.rest.request('patch', `/guilds/${this.id}/widget`, data);
 
     return response;
   }
 
-  async getWidget() {
+  async getWidget(): Promise<IWidget> {
     const response = await this.client.rest.request('get', `/guilds/${this.id}/widget.json`);
 
     return response
@@ -254,13 +262,13 @@ export class Guild extends Base {
     return response;
   }
 
-  async getWelcomeScreen() {
+  async getWelcomeScreen(): Promise<IWelcomeScreen> {
     const response = await this.client.rest.request('get', `/guilds/${this.id}/welcome-screen`);
 
     return response;
   }
 
-  async editWelcomeScreen(data?: IEditWelcomeScreen) {
+  async editWelcomeScreen(data?: IEditWelcomeScreen): Promise<IWelcomeScreen> {
     const response = await this.client.rest.request('patch', `/guilds/${this.id}/welcome-screen`, data);
 
     return response;

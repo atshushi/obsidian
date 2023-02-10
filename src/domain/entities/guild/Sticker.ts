@@ -1,6 +1,6 @@
 import type { IDiscordClient, ICreateStickerParams } from '@types';
 
-import { User } from '../index';
+import { Guild, User } from '../index';
 import { Base } from '../base';
 
 export class Sticker extends Base {
@@ -13,7 +13,6 @@ export class Sticker extends Base {
   type: number;
   formatType: number;
   available: boolean;
-  guildID: string;
   user: User;
   sortValue: number;
 
@@ -29,16 +28,19 @@ export class Sticker extends Base {
     this.type = data.type;
     this.formatType = data.format_type;
     this.available = data.available;
-    this.guildID = data.guild_id;
     this.user = new User(this.client, data.user);
     this.sortValue = data.sort_value;
   }
 
-  editSticker(data?: Omit<ICreateStickerParams, 'file'>) {
-    this.client.rest.request('patch', `/guilds/${this.guildID}/stickers/${this.id}`, data);
+  get guild(): Guild {
+    return this.client.guilds.get(this.data.guild_id);
   }
 
-  deleteSticker() {
-    this.client.rest.request('delete', `/guilds/${this.guildID}/stickers/${this.id}`);
+  edit(data?: Omit<ICreateStickerParams, 'file'>) {
+    this.client.rest.request('patch', `/guilds/${this.guild.id}/stickers/${this.id}`, data);
+  }
+
+  delete() {
+    this.client.rest.request('delete', `/guilds/${this.guild.id}/stickers/${this.id}`);
   }
 }
