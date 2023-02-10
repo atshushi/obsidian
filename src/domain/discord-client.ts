@@ -1,4 +1,4 @@
-import type { IDiscordClient, IDiscordClientOptions } from '@types';
+import type { IDiscordClient, IDiscordClientOptions, IInteractionCommandDataOption } from '@types';
 import events from 'events';
 
 import { RestWS } from '../rest/websocket';
@@ -33,5 +33,25 @@ export class DiscordClient extends events implements IDiscordClient {
 
   connect() {
     this.ws.connect();
+  }
+
+  createGlobalCommand(data: IInteractionCommandDataOption) {
+    this.rest.request('POST', `/applications/${this.user.id}/commands`, data);
+  }
+
+  editGlobalCommand(id: string, data: IInteractionCommandDataOption) {
+    this.rest.request(
+      'PATCH',
+      `/applications/${this.user.id}/commands/${id}`,
+      data,
+    );
+  }
+
+  deleteGlobalCommand(id: string, data: IInteractionCommandDataOption) {
+    this.rest.request(
+      'DELETE',
+      `/applications/${this.user.id}/commands/${id}`,
+      data,
+    );
   }
 }
