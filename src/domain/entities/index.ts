@@ -17,3 +17,4 @@ export * from './guild/Invite';
 export * from './guild/Emoji';
 export * from './guild/Integration';
 export * from './guild/GuildCommands';
+export * from './events/GuildScheduled';

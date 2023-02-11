@@ -413,3 +413,43 @@ interface IWidget {
   members: User[];
   presence_count: number;
 }
+
+interface IEntityMetadata {
+  location?: string;
+}
+
+interface IActivityTimestamps {
+  start?: number;
+  end?: number;
+}
+
+interface IActivityParty {
+  id?: string;
+  size?: number[];
+}
+
+interface IActivityAssets {
+  large_image?: string;
+  large_text?: string;
+  small_image?: string;
+  small_text?: string;
+}
+
+interface IActivitySecrets {
+  join?: string;
+  spectate?: string;
+  match?: string;
+}
+
+interface IActivityButton {
+  label: string;
+  url: string;
+}
+
+interface IAutoModerationAction {
+  type: 1 | 2 | 3;
+  metadata?: {
+    channel_id: string;
+    duration_seconds: number;
+  };
+}
