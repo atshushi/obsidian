@@ -1,8 +1,14 @@
 {
-  "extends": ["sushi/typescript"],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "extends": ["sushi"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
   "rules": {
-    "@typescript-eslint/no-explicit-any": "off",
-    "lines-between-class-members": "off",
     "default-case": "off",
     "indent": ["error", 2, {
       "SwitchCase": 1

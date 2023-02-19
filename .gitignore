@@ -11,4 +11,4 @@ node_modules/
 .editorconfig
 
 # Dev Test
-test.ts
+test.js
