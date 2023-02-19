@@ -61,28 +61,28 @@ export class Message extends Base {
      * @type {User[]}
      */
     this.mentions = data.mentions
-      .map((user) => new User(this.client, user));
+      ?.map((user) => new User(this.client, user));
 
     /**
      * @type {string[]}
      */
-    this.roleMentions = data.mention_roles.map((role) => new Role(this.client, this.guild, role));
+    this.roleMentions = data.mention_roles?.map((role) => new Role(this.client, this.guild, role));
 
     /**
      * @type {import('../../../../index').MessageChannelMentions}
      */
     this.channelMentions = {
-      id: data.data.mention_channels.id,
-      guildID: data.mention_channels.guild_id,
-      type: data.mention_channels.type,
-      name: data.mention_channels.name,
+      id: data.mention_channels?.id,
+      guildID: data.mention_channels?.guild_id,
+      type: data.mention_channels?.type,
+      name: data.mention_channels?.name,
     };
 
     /**
      * @type {Attachment[]}
      */
     this.attachments = data.attachments
-      .map((attachment) => new Attachment(this.client, attachment));
+      ?.map((attachment) => new Attachment(this.client, attachment));
 
     /**
      * @type {Embed[]}
@@ -118,8 +118,8 @@ export class Message extends Base {
      * @type {import('../../../../index').MessageActivity}
      */
     this.activity = {
-      type: data.activity.type,
-      partyID: data.activity.party_id,
+      type: data.activity?.type,
+      partyID: data.activity?.party_id,
     };
 
     /**
@@ -131,7 +131,7 @@ export class Message extends Base {
      * @type {import('../../../../index').MessageReference}
      */
     this.messageReference = data.message_reference ?? {
-      guildID: this.guild?.id ?? null,
+      guildID: this.guild?.id,
       channelID: this.channel?.id ?? data.channel_id,
       messageID: this.id,
       faiIfNotExists: data.message_reference.fail_if_not_exists,
@@ -160,21 +160,23 @@ export class Message extends Base {
     /**
      * @type {Component[]}
      */
-    this.components = data.components.map((component) => new Component(this.client, component));
+    this.components = data.components
+      ?.map((component) => new Component(this.client, component));
 
     /**
      * @type {import('../../../../index').MessageStickerItems}
      */
     this.stickerItems = {
-      id: data.sticker_items.id,
-      name: data.sticker_items.name,
-      formatType: data.sticker_items.format_type,
+      id: data.sticker_items?.id,
+      name: data.sticker_items?.name,
+      formatType: data.sticker_items?.format_type,
     };
 
     /**
      * @type {Sticker?}
      */
-    this.stickers = data.stickers ?? data.stickers.map((sticker) => new Sticker(this.client, sticker));
+    this.stickers = data.stickers
+      ?.map((sticker) => new Sticker(this.client, sticker));
 
     /**
      * @type {number}
@@ -185,10 +187,10 @@ export class Message extends Base {
      * @type {import('../../../../index').BoostRoleData}
      */
     this.boostRoleData = {
-      roleSubscriptionListingID: data.role_subscription_data.role_subscription_listing_id,
-      tierName: data.role_subscription_data.tier_name,
-      totalMonthsSubscribed: data.role_subscription_data.total_months_subscribed,
-      isRenewal: data.role_subscription_data.is_renewal,
+      roleSubscriptionListingID: data.role_subscription_data?.role_subscription_listing_id,
+      tierName: data.role_subscription_data?.tier_name,
+      totalMonthsSubscribed: data.role_subscription_data?.total_months_subscribed,
+      isRenewal: data.role_subscription_data?.is_renewal,
     };
   }
 
@@ -197,7 +199,7 @@ export class Message extends Base {
    */
   get guild() {
     // eslint-disable-next-line operator-linebreak
-    return this.client.guilds.get(this.messageReference?.guild_id) ??
+    return this.client.guilds.get(this.messageReference?.guildID) ??
       this.client.guilds.find((guild) => guild.channels.find((channel) => channel.id === this.data.channel_id));
   }
 

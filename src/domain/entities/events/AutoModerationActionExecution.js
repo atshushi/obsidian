@@ -11,10 +11,10 @@ export class AutoModerationActionExecution {
      * @type {import('../../../../index').AutoModerationAction}
      */
     this.action = {
-      type: data.action.type,
+      type: data.action?.type,
       metadata: {
-        channelID: data.action.metadata.channel_id,
-        durationSeconds: data.action.metadata.duration_seconds,
+        channelID: data.action?.metadata.channel_id,
+        durationSeconds: data.action?.metadata.duration_seconds,
       },
     };
 

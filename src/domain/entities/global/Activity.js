@@ -59,7 +59,7 @@ export class Activity {
     /**
      * @type {import('../../../../index').ActivityAssets}
      */
-    this.assets = data.assets.map((asset) => ({
+    this.assets = data.assets?.map((asset) => ({
       largeImage: asset.large_image,
       largeText: asset.large_text,
       smallImage: asset.small_image,

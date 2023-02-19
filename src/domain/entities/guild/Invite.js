@@ -60,11 +60,11 @@ export class Invite {
      * @type {import('../../../../index').StageInstance}
      */
     this.stageInstance = {
-      participantCount: data.stageInstance.participant_count,
-      speakerCount: data.stageInstance.speaker_count,
-      topic: data.stageInstance.topic,
-      members: data.stageInstance.members
-        .map((member) => new Member(this.client, this.guild, member)),
+      participantCount: data.stageInstance?.participant_count,
+      speakerCount: data.stageInstance?.speaker_count,
+      topic: data.stageInstance?.topic,
+      members: data.stageInstance?.members
+        ?.map((member) => new Member(this.client, this.guild, member)),
     };
 
     /**

@@ -22,7 +22,7 @@ export class Team extends Base {
     /**
      * @type {import('../../../../index').TeamMembers}
      */
-    this.members = data.members.map((member) => ({
+    this.members = data.members?.map((member) => ({
       membershipState: member.membership_state,
       permissions: member.permissions,
       teamID: member.team_id,

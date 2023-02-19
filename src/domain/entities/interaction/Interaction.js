@@ -29,7 +29,7 @@ export class Interaction extends Base {
      */
     this.command = data.data;
 
-    /*
+    /**
      * @type {Member | User}
      */
     // eslint-disable-next-line operator-linebreak

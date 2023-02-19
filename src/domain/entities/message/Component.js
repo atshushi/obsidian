@@ -13,10 +13,10 @@ export class Component {
      * @type {import('../../../../index').Component[]}
      */
     this.components = {
-      type: data.components.type,
-      label: data.components.label,
-      style: data.components.style,
-      customID: data.components.custom_id,
+      type: data.components?.type,
+      label: data.components?.label,
+      style: data.components?.style,
+      customID: data.components?.custom_id,
     };
   }
 }

@@ -63,12 +63,12 @@ export class Role extends Base {
      * @type {import('../../../../index').GuildRoleTags}
      */
     this.tags = {
-      botID: data.tags.bot_id,
-      integrationID: data.tags.integration_id,
-      premiumSubscriber: data.tags.premium_subscriber,
-      subscriptionListingID: data.tags.subscription_listing_id,
-      availableForPurchase: data.available_for_purchase,
-      guildConnections: data.guild_connections,
+      botID: data.tags?.bot_id,
+      integrationID: data.tags?.integration_id,
+      premiumSubscriber: data.tags?.premium_subscriber,
+      subscriptionListingID: data.tags?.subscription_listing_id,
+      availableForPurchase: data.tags?.available_for_purchase,
+      guildConnections: data.tags?.guild_connections,
     };
 
     /**

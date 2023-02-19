@@ -8,6 +8,6 @@ export class MessageInteraction {
   constructor(client, data = {}) {
     this.content = data.content;
     this.components = data.components
-      .map((component) => new Component(client, component));
+      ?.map((component) => new Component(client, component));
   }
 }
