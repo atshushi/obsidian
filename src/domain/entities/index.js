@@ -23,3 +23,5 @@ export * from './message/MessagePayload.js';
 export * from './events/AutoModerationActionExecution.js';
 export * from './events/VoiceState.js';
 export * from './global/Activity.js';
+export * from './interaction/ComponentInteraction.js';
+export * from './interaction/MessageInteraction.js';

@@ -13,6 +13,8 @@ import {
   Emoji,
   Sticker,
   VoiceState,
+  ComponentInteraction,
+  MessageInteraction,
 } from '../../domain/entities/index.js';
 
 export const dispatch = (client, { d, t }) => {
@@ -306,9 +308,20 @@ export const dispatch = (client, { d, t }) => {
       });
       break;
 
-    case 'INTERACTION_CREATE':
-      client.emit('InteractionCreate', new CommandInteraction(client, d));
+    case 'INTERACTION_CREATE': {
+      switch (d.type) {
+        case 2:
+          client.emit('InteractionCreate', new CommandInteraction(client, d));
+          break;
+        case 3:
+          client.emit(
+            'InteractionCreate',
+            d?.components ? new ComponentInteraction(client, d) : new MessageInteraction(client, d),
+          );
+          break;
+      }
       break;
+    }
 
     case 'INVITE_CREATE': {
       const guild = client.guilds.get(d.guild_id);
