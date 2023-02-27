@@ -1,7 +1,7 @@
 import events from 'events';
 
 import { RestWS } from '../rest/websocket.js';
-import { RestClient } from '../rest/rest-client.js';
+import { RequestClient } from '../rest/request-client.js';
 import { Collection } from '../utils/Collection.js';
 
 /**
@@ -20,7 +20,7 @@ export class DiscordClient extends events {
     super();
 
     this.ws = new RestWS(this);
-    this.rest = new RestClient(this);
+    this.rest = new RequestClient(this);
 
     this.options = options;
     this.token = token;

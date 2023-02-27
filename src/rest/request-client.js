@@ -1,6 +1,6 @@
 import { fetch } from 'undici';
 
-export class RestClient {
+export class RequestClient {
   constructor(client) {
     this.client = client;
   }

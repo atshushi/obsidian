@@ -1,11 +1,9 @@
 import process from 'node:process';
 import WebSocket from 'ws';
 
-import { OPCodes } from '../utils/opcodes.js';
 import { parseIntents } from '../utils/gateway-intents.js';
-
-import { dispatch } from './methods/dispatch.js';
 import { heartbeat } from './methods/heartbeat.js';
+import { dispatch } from './methods/dispatch.js';
 
 export class RestWS {
   constructor(client) {
@@ -24,11 +22,10 @@ export class RestWS {
     const payload = JSON.parse(message.toString());
 
     switch (payload.op) {
-      case OPCodes.HELLO:
+      case 10:
         heartbeat(ws, payload.d.heartbeat_interval);
         break;
-
-      case OPCodes.DISPATCH:
+      case 0:
         dispatch(this.client, payload);
         break;
     }
@@ -39,7 +36,7 @@ export class RestWS {
     const intents = parseIntents(this.client.options?.intents) ?? 0;
 
     ws.send(JSON.stringify({
-      op: OPCodes.IDENTIFY,
+      op: 2,
       d: {
         token: this.client.token,
         intents,
